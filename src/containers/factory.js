@@ -16,4 +16,4 @@ class ContainerFactory{
     }
 }
 
-return ContainerFactory;
+export default ContainerFactory;
