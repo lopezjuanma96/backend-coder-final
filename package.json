@@ -1,0 +1,23 @@
+{
+  "name": "backend-coder-final",
+  "version": "1.0.0",
+  "description": "Final deliverable for Coderhouse Backend Course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lopezjuanma96/backend-coder-final.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lopezjuanma96/backend-coder-final/issues"
+  },
+  "homepage": "https://github.com/lopezjuanma96/backend-coder-final#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
