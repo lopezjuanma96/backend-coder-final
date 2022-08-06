@@ -3,6 +3,14 @@ class odin {
         throw new Error(`constructor not implemented for ${this.constructor.name}`);
     }
 
+    _nextNumber(list){
+        var n = 0;
+        list.forEach((e) => {
+            n = n < parseInt(e) ? parseInt(e)+1 : n;
+        })
+        return n;
+    }
+
     save(){
         throw new Error(`save not implemented for ${this.constructor.name}`);
     }

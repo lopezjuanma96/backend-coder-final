@@ -1,9 +1,10 @@
 import odin from './odin.js';
 
-class memory extends odin {
+class Container extends odin {
     db;
 
     constructor(){
+        super();
         db = [];
     }
 
@@ -11,11 +12,7 @@ class memory extends odin {
         return db.findIndex((e) => e.id === id);
     }
     #autoId(){
-        var newId = 0;
-        db.forEach((e) => {
-            newId = newId < e.id ? e.id+1 : newId;
-        })
-        return newId;
+        return this._newNumber(db.map(e => e.id));
     }
 
     async save(data){
@@ -59,3 +56,5 @@ class memory extends odin {
         return deleted;
     }
 }
+
+export default Container;
