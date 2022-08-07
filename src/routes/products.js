@@ -2,6 +2,8 @@ import DAO from '../containers/daos/productsDAO.js';
 import DTO from '../containers/daos/productsDTO.js';
 import { Router } from 'express';
 
+import logger from '../utils/logger.js';
+
 const prodRouter = new Router();
 
 prodRouter.get('/', (req, res) => {
@@ -92,3 +94,5 @@ prodRouter.delete('/remove/:id', (req, res) => {
         res.json({err: err.message});
     })
 })
+
+export default prodRouter

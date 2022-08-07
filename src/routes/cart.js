@@ -1,6 +1,8 @@
 import { Router } from "express";
 import DAO from '../containers/daos/cartDAO.js'
 
+import logger from '../utils/logger.js';
+
 const cartRouter = new Router();
 
 cartRouter.get('/', (req, res) => {

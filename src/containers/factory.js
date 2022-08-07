@@ -1,6 +1,6 @@
-import {Container as Firebase} from './firebase.js';
-import {Container as Mongo} from './mongo.js';
-import {Container as Memory} from './memory.js';
+import Firebase from './firebase.js';
+import Mongo from './mongo.js';
+import Memory from './memory.js';
 
 class ContainerFactory{
     static getContainer(type, refer){
