@@ -35,3 +35,5 @@ class DTO{
         }
     }
 }
+
+export default DTO;

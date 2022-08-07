@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 
 import { createRequire } from "module"; // Bring in the ability to create the 'require' method
 const require = createRequire(import.meta.url); // construct the require method
-const serviceAccount = require("./react-backend-67669-firebase-adminsdk-wu9wg-56253767e1.json");
+const serviceAccount = require("./setup/react-backend-67669-firebase-adminsdk-wu9wg-56253767e1.json");
 
 class Container extends odin {
     db;
@@ -58,7 +58,9 @@ class Container extends odin {
     }
     async deleteByAttr(key, val) {
         const docs = await this.db.where(key, "==", val).get();
-        docs.docs.forEach(doc => await doc.delete())
+        const promises = [];
+        docs.docs.forEach(doc => promises.push(doc.delete()))
+        await Promise.all(promises)
         return docs.docs.map((doc) => {
             return {id: doc.id, ...doc.data()}
         });

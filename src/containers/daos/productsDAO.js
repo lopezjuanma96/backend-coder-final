@@ -1,5 +1,5 @@
-import { Schema, Model } from 'mongoose';
-import DTO from '../dtos/productsDTO';
+import mongoose from 'mongoose';
+import DTO from '../dtos/productsDTO.js';
 import ContainerFactory from '../factory.js';
 
 const CONTAINER_TYPE = 'firebase';
@@ -8,14 +8,14 @@ var REFER;
 if(CONTAINER_TYPE === 'firebase'){
     REFER = 'products';
 } else if (CONTAINER_TYPE === 'mongo'){
-    const schema = new Schema({
+    const schema = new mongoose.Schema({
         title: {type: String, required: true, max: 100},
         price: {type: Number, required: true},
         thumbnail: {type: String, required: true, max: 100},
         id: {type: Number, required: true},
         timestamp: {type: Number, required: true}
     });
-    REFER = new Model('products', schema);
+    REFER = mongoose.model('products', schema);
 }
 
 class DAO{
@@ -61,3 +61,5 @@ class DAO{
         return new DTO(got);
     }
 }
+
+export default DAO;

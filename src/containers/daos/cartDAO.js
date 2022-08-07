@@ -1,5 +1,5 @@
-import { Schema, Model } from 'mongoose';
-import DTO from '../dtos/cartDTO';
+import mongoose from 'mongoose';
+import DTO from '../dtos/cartDTO.js';
 import ContainerFactory from '../factory.js';
 
 const CONTAINER_TYPE = 'firebase';
@@ -8,12 +8,12 @@ var REFER;
 if(CONTAINER_TYPE === 'firebase'){
     REFER = 'cart';
 } else if (CONTAINER_TYPE === 'mongo'){
-    const schema = new Schema({
+    const schema = new mongoose.Schema({
         productos: {type: [Number]},
         id: {type: Number, required: true},
         timestamp: {type: Number, required: true}
     });
-    REFER = new Model('cart', schema);
+    REFER = mongoose.model('cart', schema);
 }
 
 class DAO{
@@ -59,3 +59,5 @@ class DAO{
         return new DTO(got);
     }
 }
+
+export default DAO;

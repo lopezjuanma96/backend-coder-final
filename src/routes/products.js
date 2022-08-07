@@ -1,5 +1,5 @@
 import DAO from '../containers/daos/productsDAO.js';
-import DTO from '../containers/daos/productsDTO.js';
+import DTO from '../containers/dtos/productsDTO.js';
 import { Router } from 'express';
 
 import logger from '../utils/logger.js';

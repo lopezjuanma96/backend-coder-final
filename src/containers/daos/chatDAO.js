@@ -1,5 +1,5 @@
-import { Schema, Model } from 'mongoose';
-import DTO from '../dtos/chatDTO';
+import mongoose from 'mongoose';
+import DTO from '../dtos/chatDTO.js';
 import ContainerFactory from '../factory.js';
 
 const CONTAINER_TYPE = 'firebase';
@@ -8,14 +8,14 @@ var REFER;
 if(CONTAINER_TYPE === 'firebase'){
     REFER = 'chat';
 } else if (CONTAINER_TYPE === 'mongo'){
-    const schema = new Schema({
+    const schema = new mongoose.Schema({
         id: {type: Number, required: true},
         socket: {type: String, required: true, max: 100},
         user: {type: String, required: true, max: 50},
         msg: {type: String, max: 255},
         date: {type: Date}
     });
-    REFER = new Model('chat', schema);
+    REFER = mongoose.model('chat', schema);
 }
 
 class DAO{
@@ -61,3 +61,5 @@ class DAO{
         return new DTO(got);
     }
 }
+
+export default DAO;
