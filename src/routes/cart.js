@@ -6,7 +6,7 @@ import logger from '../utils/logger.js';
 const cartRouter = new Router();
 
 cartRouter.get('/', (req, res) => {
-    const user = req.session.user;
+    const user = req.session?.user;
     DAO.getSome('user', user)
     .then(cart => {
         res.status(200).json(cart.get())
@@ -18,7 +18,7 @@ cartRouter.get('/', (req, res) => {
 })
 
 cartRouter.post('/add', (req, res) => {
-    const user = req.session.user;
+    const user = req.session?.user;
     const prodId = req.query.id;
     DAO.getSome('user', user)
     .then(cart => {
@@ -33,7 +33,7 @@ cartRouter.post('/add', (req, res) => {
 })
 
 cartRouter.post('/remove', (req, res) => {
-    const user = req.session.user;
+    const user = req.session?.user;
     const prodId = req.query.id;
     DAO.getSome('user', user)
     .then(cart => {

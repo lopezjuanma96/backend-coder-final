@@ -4,7 +4,7 @@ import { Router } from 'express';
 const chatRouter = new Router();
 
 chatRouter.get('/', (req, res) => {
-    const user = req.session.user;
+    const user = req.session?.user;
     res.render('chat', { userData: user });
 })
 
