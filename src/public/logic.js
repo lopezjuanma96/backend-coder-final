@@ -1,4 +1,6 @@
 const chatMessages = document.querySelector('#chatMessages');
+const productsBlock = document.querySelector('.productsBlock');
+
 const userAlias = document.querySelector('#userAlias').textContent;
 
 if (chatMessages){
@@ -51,4 +53,33 @@ if (chatMessages){
             e.preventDefault()
         }
     })
+}
+
+if (productsBlock) {
+    const productsTable = document.querySelector('#productsTable'); 
+    const productsSendButton = document.querySelector('#addProductFormSendButton');
+    const addProductForm = document.querySelector('#addProductForm');
+    socket.on('newProductUpdate', (prod) => {
+        productsTable.innerHTML += `
+            <tr>
+                <td>${prod.name}</td>
+                <td>${prod.stock}</td>
+                <td>${prod.price}</td>
+                <td>${prod.thumbnail}</td>
+            </tr>
+        `
+    })
+    if (productsSendButton) {
+        productsSendButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const toSend = {}
+            addProductForm.children.forEach((elem) => {
+                if (elem.name){
+                    toSend[`${elem.name}`] = elem.value;
+                    elem.value = "";
+                }
+            })
+            console.log(toSend);
+        })
+    }
 }

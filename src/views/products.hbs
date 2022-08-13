@@ -2,29 +2,41 @@
 
 {{#if userData.isAdmin}}
 <h2>New Product:</h2>
-<form class="addProductForm">
+<form class="addProductForm" id="addProductForm">
     <label class="addProductFormLabel">Name:</label>
     <input class="addProductFormInput" name="name">
     <label class="addProductFormLabel">Price:</label>
     <input class="addProductFormInput" name="price">
     <label class="addProductFormLabel">Image:</label>
-    <input class="addProductFormInput" name="image" type="image">
+    <input class="addProductFormInput" name="thumbnail" type="image">
     <label class="addProductFormLabel">Stock:</label>
     <input class="addProductFormInput" name="stock">
+    <div class="addProductFormButtons">
+        <button class="addProductFormSendButton" id="addProductFormSendButton" type="button">Add</button>
+        <button class="addProductFormResetButton" type="reset">Clear</button>
+    </div>
 </form>
 {{/if}}
 
 <div class="productsBlock">
     {{#if productData.exists}}
-    <table class="productsTable">
+    <table class="productsTable" id="productsTable">
         <tr>
             <th>Name</th>
             <th>Stock</th>
             <th>Price</th>
             <th>Image</th>
         </tr>
+        {{#each productData.prod}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.thumbnail}}</td>
+        </tr>
+        {{/each}}
     </table>
-    {{#else}}
+    {{else}}
     <h2>No products available!</h2>
     {{/if}}
 </div>

@@ -19,6 +19,9 @@ import logger from './utils/logger.js';
 import ChatDAO from './containers/daos/chatDAO.js';
 import ChatDTO from './containers/dtos/chatDTO.js';
 
+import ProdDAO from './containers/daos/productsDAO.js';
+import ProdDTO from './containers/dtos/productsDTO.js';
+
 //env
 import dotenv from 'dotenv';
 import path from 'path';
@@ -33,6 +36,7 @@ const io = new Io(http);
 const PORT = process.env.PORT || 8080;
 
 const chatDAO = new ChatDAO();
+const prodDAO = new ProdDAO();
 
 //----------- END CONSTANTS --------------
 
@@ -75,7 +79,7 @@ http.listen(PORT, () => {
 io.on('connection', (socket) => {
     logger.info(`New user connected!`);
     chatDAO.getAll()
-    .then((msgs) => socket.emit('chatMessages', msgs.map(m => m.getForDb()))) //im not being able to serialize the DTO, so for what is it worth?
+    .then((msgs) => socket.emit('chatMessages', msgs.map(m => m.getForDb()))) //HERE im not being able to serialize the DTO, so for what is it worth?
     .catch((err) => logger.error(err.message));
     socket.on('newChatMessageInput', (msg) => {
         chatDAO.save(new ChatDTO({
@@ -85,8 +89,22 @@ io.on('connection', (socket) => {
             date: Date.now()
         }))
         .then((saved) => {
-            socket.emit('newChatMessageUpdate', saved.getForDb()); //im not being able to serialize the DTO, so for what is it worth?
+            socket.emit('newChatMessageUpdate', saved.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
         });
     });
+    socket.on('newProductInput', (prod) => {
+        prodDAO.save( new ProdDTO({
+            id : prod.id,
+            name : prod.name,
+            price : prod.price,
+            stock : prod.stock,
+            thumbnail : prod.thumbnail,
+            creation : Date.now(),
+            lastUpdate : Date.now()
+        }))
+        .then((saved) => {
+            socket.emit('newProductUpdate', saved.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+        });
+    })
 })
 //----------- END SETUP --------------

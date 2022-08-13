@@ -5,10 +5,15 @@ import { Router } from 'express';
 import logger from '../utils/logger.js';
 
 const prodRouter = new Router();
+const dao = new DAO();
 
 prodRouter.get('/', (req, res) => {
-    DAO.getAll()
-    .then(prods => res.render('products', {prods}))
+    const user = req.session?.user || 'default';
+    dao.getAll()
+    .then(prods => {
+        prods = prods.map(p => p.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+        res.render('products', { userData: {userAlias: user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} });
+    })
     .catch(err => {
         logger.error(err.message);   
         res.json({err: err.message});
@@ -16,7 +21,7 @@ prodRouter.get('/', (req, res) => {
 })
 
 prodRouter.get('/:id', (req, res) => {
-    DAO.getSome('id', req.params.id)
+    dao.getSome('id', req.params.id)
     .then(prods => {
         if (prods.length == 1) {
             res.render('productDetail', {prod: prods[0]})
@@ -33,14 +38,14 @@ prodRouter.get('/:id', (req, res) => {
 
 prodRouter.post('/add', (req, res) => {
     const prodToAdd = req.body;
-    DAO.getSome('id', prodToAdd.id)
+    dao.getSome('id', prodToAdd.id)
     .then((prods) => {
         if (prods.length == 0){
-            DAO.save(new DTO(prodToAdd))
+            dao.save(new DTO(prodToAdd))
             .then((p) => res.redirect('./'))
         } else if (prods.length == 1){
             prods[0].stockUp(prodToAdd.stock);
-            DAO.save(prods[0])
+            dao.save(prods[0])
             .then((p) => res.redirect('./'))
         } else {
             logger.error('invalid request body');   
@@ -56,10 +61,10 @@ prodRouter.post('/add', (req, res) => {
 prodRouter.put('/addStock/:id', (req, res) => {
     const idToModify = req.params.id;
     const qToAdd = req.query.q > 1 ? req.query.q : 1;
-    DAO.getSome('id', idToModify)
+    dao.getSome('id', idToModify)
     .then((prods) => {
         prods[0].stockUp(qToAdd);
-        DAO.save(prods[0])
+        dao.save(prods[0])
         .then((p) => res.redirect('./'))
     })
     .catch(err => {
@@ -71,10 +76,10 @@ prodRouter.put('/addStock/:id', (req, res) => {
 prodRouter.put('/subStock/:id', (req, res) => {
     const idToModify = req.params.id;
     const qToSub = req.query.q > 1 ? req.query.q : 1;
-    DAO.getSome('id', idToModify)
+    dao.getSome('id', idToModify)
     .then((prods) => {
         prods[0].stockDown(qToSub);
-        DAO.save(prods[0])
+        dao.save(prods[0])
         .then((p) => res.redirect('./'))
     })
     .catch(err => {
@@ -85,7 +90,7 @@ prodRouter.put('/subStock/:id', (req, res) => {
 
 prodRouter.delete('/remove/:id', (req, res) => {
     const idToDelete = req.params.id;
-    DAO.deleteSome('id', idToDelete)
+    dao.deleteSome('id', idToDelete)
     .then((del) => {
         res.redirect('./')
     })
