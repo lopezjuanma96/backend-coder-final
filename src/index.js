@@ -16,8 +16,13 @@ import prodRouter from "./routes/products.js";
 import logger from './utils/logger.js';
 
 //dao
-import chatDAO from './containers/daos/cartDAO.js';
-import chatDTO from './container/dtos/cartDTO.js';
+import ChatDAO from './containers/daos/chatDAO.js';
+import ChatDTO from './containers/dtos/chatDTO.js';
+
+//env
+import dotenv from 'dotenv';
+import path from 'path';
+
 //----------- END IMPORTS --------------
 
 //------------- CONSTANTS ----------------
@@ -26,9 +31,17 @@ const app = express();
 const http = new Http(app);
 const io = new Io(http);
 const PORT = process.env.PORT || 8080;
+
+const chatDAO = new ChatDAO();
+
 //----------- END CONSTANTS --------------
 
 //------------- SETUP ----------------
+//env
+dotenv.config({
+    path: path.resolve(process.cwd(), `${process.env.NODE_ENV}.env`)
+})
+
 //server
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -42,28 +55,37 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', './src/views');
 
-app.use(express.static('./public'))
+app.use(express.static('./src/public'))
 
 app.use('/api/products', prodRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/cart', cartRouter)
 
-http.listen(PORT, () => logger.info(`Server up in http://localhost:${PORT}`))
+http.listen(PORT, () => {
+    if (process.env.NODE_ENV == "DEV"){
+        logger.info(`Server up in http://localhost:${PORT} - ENVIRONMENT: ${process.env.NODE_ENV}`);
+        logger.info(`Persistance on Products: ${process.env.PROD_CONTAINER_TYPE}`);
+        logger.info(`Persistance on Cart: ${process.env.CART_CONTAINER_TYPE}`);
+        logger.info(`Persistance on Chat: ${process.env.CHAT_CONTAINER_TYPE}`);
+    } else {
+        logger.info('Server up in http://localhost:${PORT}');
+    }
+})
 
 io.on('connection', (socket) => {
     logger.info(`New user connected!`);
     chatDAO.getAll()
     .then((msgs) => socket.emit('chatMessages', msgs))
     .catch((err) => logger.error(err.message));
-    socket.on('newMessageInput', (msg) => {
-        chatDAO.save(new chatDTO({
+    socket.on('newChatMessageInput', (msg) => {
+        chatDAO.save(new ChatDTO({
             //can w include id
             user: msg.user,
             text: msg.text,
             date: Date.now()
         }))
         .then((saved) => {
-            socket.emit('newMessageUpdate', msg); //CHECK IF WE CAN DO THIS LIKE THIS OR RE-ASK FOR CHAT DAO FOR ALL MESSAGES
+            socket.emit('newChatMessageUpdate', msg); //CHECK IF WE CAN DO THIS LIKE THIS OR RE-ASK FOR CHAT DAO FOR ALL MESSAGES
         });
     });
 })
