@@ -31,7 +31,7 @@ class DTO{
         return counts;
     }
 
-    forDb(){
+    getForDb(){
         return {
             id: this.getId(),
             name: this.getName(),

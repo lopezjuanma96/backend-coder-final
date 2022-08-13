@@ -33,7 +33,7 @@ class DAO{
 
     async getAll(){
         const got = await this.container.getAll();
-        return new DTO(got);
+        return got.map(g => new DTO(g));
     }
 
     async getSome(key, val){
@@ -43,12 +43,12 @@ class DAO{
         } else {
             got = await this.container.getByAttr(key, val);
         }
-        return new DTO(got);
+        return got.map(g => new DTO(g));
     }
 
     async deleteAll(){
         const got = await this.container.deleteAll();
-        return new DTO(got);
+        return got.map(g => new DTO(g));
     }
 
     async deleteSome(key, val){
@@ -58,7 +58,7 @@ class DAO{
         } else {
             got = await this.container.deleteByAttr(key, val);
         }
-        return new DTO(got);
+        return got.map(g => new DTO(g));
     }
 }
 

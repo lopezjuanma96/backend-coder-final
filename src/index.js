@@ -75,7 +75,7 @@ http.listen(PORT, () => {
 io.on('connection', (socket) => {
     logger.info(`New user connected!`);
     chatDAO.getAll()
-    .then((msgs) => socket.emit('chatMessages', msgs))
+    .then((msgs) => socket.emit('chatMessages', msgs.map(m => m.getForDb()))) //im not being able to serialize the DTO, so for what is it worth?
     .catch((err) => logger.error(err.message));
     socket.on('newChatMessageInput', (msg) => {
         chatDAO.save(new ChatDTO({
@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
             date: Date.now()
         }))
         .then((saved) => {
-            socket.emit('newChatMessageUpdate', msg); //CHECK IF WE CAN DO THIS LIKE THIS OR RE-ASK FOR CHAT DAO FOR ALL MESSAGES
+            socket.emit('newChatMessageUpdate', saved.getForDb()); //im not being able to serialize the DTO, so for what is it worth?
         });
     });
 })

@@ -12,7 +12,7 @@ class Container extends odin {
         return this.db.findIndex((e) => e.id === id);
     }
     #autoId(){
-        return this._newNumber(this.db.map(e => e.id));
+        return this._nextNumber(this.db.map(e => e.id));
     }
 
     async save(data){

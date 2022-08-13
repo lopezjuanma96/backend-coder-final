@@ -14,7 +14,7 @@ class DTO{
     getText = () => this.#text;
     getDate = () => this.#date;
 
-    forDb(){
+    getForDb(){
         return {
             id: this.getId(),
             user: this.getUser(),
