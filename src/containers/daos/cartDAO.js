@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import DTO from '../dtos/cartDTO.js';
 import ContainerFactory from '../factory.js';
 
-const CONTAINER_TYPE = 'firebase';
+const CONTAINER_TYPE = process.env.CART_CONTAINER_TYPE || 'memory';
 var REFER;
 
 if(CONTAINER_TYPE === 'firebase'){
@@ -20,7 +20,7 @@ class DAO{
     container;
 
     constructor(){
-        container = ContainerFactory.getContainer(CONTAINER_TYPE, REFER);
+        this.container = ContainerFactory.getContainer(CONTAINER_TYPE, REFER);
     }
 
     async save(obj){

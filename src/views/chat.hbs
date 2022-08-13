@@ -1,7 +1,7 @@
-<h2>Welcome to chat {{user}}</h2>
+<h2>Welcome to chat <span id="userAlias">{{userData.userAlias}}</span></h2>
 
 <div class="chatBlock">
-    <div class="chatMessages"></div>
+    <div class="chatMessages" id="chatMessages"></div>
     <form class="chatInputForm">
         <input class="chatInput" id="chatInput" placeholder="Enter your message here..">
         <div class="chatInputButtons">

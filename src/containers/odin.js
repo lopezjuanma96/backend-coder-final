@@ -1,6 +1,8 @@
 class odin {
     constructor(){
-        throw new Error(`constructor not implemented for ${this.constructor.name}`);
+        if (this.constructor.name == 'odin'){
+            throw new Error(`constructor not implemented for ${this.constructor.name}`);
+        }
     }
 
     _nextNumber(list){
