@@ -1,4 +1,4 @@
-<h2>This is our catalogue!</h2>
+<h2><span id="userAlias">{{userData.userAlias}}</span> this is our catalogue!</h2>
 
 {{#if userData.isAdmin}}
 <h2>New Product:</h2>
@@ -37,6 +37,10 @@
         {{/each}}
     </table>
     {{else}}
-    <h2>No products available!</h2>
+    <h2 class="noProductsTitle">No products available!</h2>
     {{/if}}
+    <table id="addedProducts">
+    </table>
 </div>
+
+<button type="button" class="goBackButton"><a href="/home">Go Back</a></button>

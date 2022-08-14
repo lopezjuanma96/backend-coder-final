@@ -5,7 +5,7 @@
   "description": "Final deliverable for Coderhouse Backend Course",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=DEV node src/index.js",
     "build": "node src/index.js"
   },
   "repository": {

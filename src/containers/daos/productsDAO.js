@@ -28,7 +28,7 @@ class DAO{
     async save(obj){
         const toSave = obj.getForDb();
         const saved = await this.container.save(toSave);
-        return saved;
+        return obj;
     }
 
     async getAll(){

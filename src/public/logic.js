@@ -15,55 +15,59 @@ if (chatMessages){
                 <b>${userAlias === m.user ? 'You:' : m.user}</b><br>
                 <p>${m.text}</p><br>
                 <i>${m.date}</i>
-            </div>
-        `).join('\n')
-    })
-
-    socket.on('newChatMessageUpdate', (m) => {
-        chatMessages.innerHTML += `
-            <div class=chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}>
+                </div>
+                `).join('\n')
+            })
+            
+            socket.on('newChatMessageUpdate', (m) => {
+                chatMessages.innerHTML += `
+                <div class=chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}>
                 <b>${userAlias === m.user ? 'You:' : m.user}</b><br>
                 <p>${m.text}</p><br>
                 <i>${m.date}</i>
             </div>
             `
-    })
-
-    function sendMsg(){
-        if(chatInput.value.length > 0){
-            const msgObj = {
-                text: chatInput.value,
-                user: userAlias
-            };
-            chatInput.value = "";
-            socket.emit('newChatMessageInput', msgObj)
+        })
+        
+        function sendMsg(){
+            if(chatInput.value.length > 0){
+                const msgObj = {
+                    text: chatInput.value,
+                    user: userAlias
+                };
+                chatInput.value = "";
+                socket.emit('newChatMessageInput', msgObj)
+            }
         }
-    }
-
-    chatInputButtonSend.addEventListener('click', (e) => {
-        e.preventDefault();
-        sendMsg()
-    })
-
-    chatInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter'){
-            e.preventDefault()
+        
+        chatInputButtonSend.addEventListener('click', (e) => {
+            e.preventDefault();
             sendMsg()
-        } else if (!/[A-Z]|[a-z]|\s|\?|\¿|\!|\¡|\.|\,/ig.test(e.key)) {
+        })
+        
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter'){
+                e.preventDefault()
+                sendMsg()
+            } else if (!/[A-Z]|[a-z]|\s|\?|\¿|\!|\¡|\.|\,/ig.test(e.key)) {
             e.preventDefault()
         }
     })
 }
 
 if (productsBlock) {
-    const productsTable = document.querySelector('#productsTable'); 
+    const socket = io()
+    const addedProducts = document.querySelector('#addedProducts'); 
     const productsSendButton = document.querySelector('#addProductFormSendButton');
     const addProductForm = document.querySelector('#addProductForm');
     socket.on('newProductUpdate', (prod) => {
-        productsTable.innerHTML += `
-            <tr>
-                <td>${prod.name}</td>
-                <td>${prod.stock}</td>
+        if (addedProducts.childElementCount === 0) {
+            addedProducts.innerHTML += '<h2>You added this products:</h2>'    
+        }
+        addedProducts.innerHTML += `
+        <tr>
+        <td>${prod.name}</td>
+        <td>${prod.stock}</td>
                 <td>${prod.price}</td>
                 <td>${prod.thumbnail}</td>
             </tr>
@@ -72,14 +76,14 @@ if (productsBlock) {
     if (productsSendButton) {
         productsSendButton.addEventListener('click', (e) => {
             e.preventDefault();
-            const toSend = {}
-            addProductForm.children.forEach((elem) => {
+            const toSend = {};
+            addProductForm.childNodes.forEach((elem) => {
                 if (elem.name){
-                    toSend[`${elem.name}`] = elem.value;
+                    toSend[`${elem.name}`] = parseFloat(elem.value) || elem.value;
                     elem.value = "";
                 }
             })
-            console.log(toSend);
+            socket.emit('newProductInput', toSend);
         })
     }
 }
