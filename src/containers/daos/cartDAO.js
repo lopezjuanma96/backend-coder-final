@@ -44,6 +44,16 @@ class DAO{
         return got.map(g => new DTO(g));
     }
 
+    async getFirst(key, val){
+        var got;
+        if (key === 'id'){
+            got = await this.container.getById(val);
+        } else {
+            got = await this.container.getByAttr(key, val);
+        }
+        return new DTO(got[0] || {});
+    }
+
     async deleteAll(){
         const got = await this.container.deleteAll();
         return got.map(g => new DTO(g));

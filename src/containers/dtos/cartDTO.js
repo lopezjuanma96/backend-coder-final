@@ -4,7 +4,7 @@ class DTO{
     constructor(obj){
         this.#id = obj.id;
         this.#user = obj.user;
-        this.#products = obj.products;
+        this.#products = obj.products || [];
         this.#creation = obj.created;
         this.#lastUpdate = obj.updated;
     }
@@ -34,9 +34,8 @@ class DTO{
     getForDb(){
         return {
             id: this.getId(),
-            name: this.getName(),
-            stock: this.getStock(),
-            thumbnail: this.getThumbnail(),
+            user: this.getUser(),
+            products: this.productCounts(),
             created: this.getCreationDate(),
             updated: this.getLastUpdateDate()
         }
