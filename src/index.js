@@ -27,6 +27,10 @@ import ProdDTO from './containers/dtos/productsDTO.js';
 import dotenv from 'dotenv';
 import path from 'path';
 
+//cookies-session
+import session from 'express-session';
+import cookies from 'cookie-parser';
+
 //----------- END IMPORTS --------------
 
 //------------- CONSTANTS ----------------
@@ -61,6 +65,14 @@ app.set('view engine', 'hbs');
 app.set('views', './src/views');
 
 app.use(express.static('./src/public'))
+
+app.use(cookies('cookies'))
+app.use(session({
+    //HERE: add mongoStore
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}))
 
 app.use('/users', usersRouter)
 app.use('/products', prodRouter)

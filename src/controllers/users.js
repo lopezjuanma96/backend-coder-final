@@ -18,6 +18,21 @@ export async function getHandler(req){
     }
 }
 
+export async function logoutGetHandler(req){
+    const user = req.session.user;
+    if (user) {
+        req.session.destroy(err => {
+            if (err) {
+                throw new Error(`Unable to finish session`)
+            } else {
+                return {userData: user}
+            }
+        })
+    } else {
+        throw new Error('Unexisting session')
+    }
+}
+
 export async function registerPostHandler(req){
     const body = req.body;
     if (!(body.alias && body.password && body.email)){

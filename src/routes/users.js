@@ -1,4 +1,4 @@
-import { getHandler, registerPostHandler, loginPostHandler, deleteHandler } from "../controllers/users.js";
+import { logoutGetHandler, registerPostHandler, loginPostHandler, deleteHandler } from "../controllers/users.js";
 import { Router } from "express";
 import logger from "../utils/logger.js";
 
@@ -41,7 +41,10 @@ usersRouter.get('/login', (req, res) => {
 
 usersRouter.post('/login', (req, res) => {
     loginPostHandler(req)
-    .then(results => res.render('loginSuccess', results))
+    .then(results => {
+        req.session.user = results.userData;
+        res.render('loginSuccess', results)
+    })
     .catch(err => {
         logger.error(err.message);
         res.render('loginFail', {err});
@@ -54,6 +57,24 @@ usersRouter.post('/login/api', (req, res) => {
     .catch(err => {
         logger.error(err.message);
         res.json({error: err});
+    })
+})
+
+usersRouter.get('/logout', (req, res) => {
+    logoutGetHandler(req)
+    .then(result => res.render('logout', result))
+    .catch(err => {
+        logger.error(err.message)
+        res.render('error', {at:'logout', err:err.message})
+    })
+})
+
+usersRouter.get('/logout/api', (req, res) => {
+    logoutGetHandler(req)
+    .then(result => res.json(result))
+    .catch(err => {
+        logger.error(err.message)
+        res.json({at:'logout', err:err.message})
     })
 })
 
