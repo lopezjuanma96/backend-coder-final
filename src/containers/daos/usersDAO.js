@@ -1,21 +1,23 @@
 import mongoose from 'mongoose';
-import DTO from '../dtos/productsDTO.js';
+import DTO from '../dtos/usersDTO.js';
 import ContainerFactory from '../factory.js';
 
-const CONTAINER_TYPE = process.env.PROD_CONTAINER_TYPE || 'memory';
+const CONTAINER_TYPE = process.env.USERS_CONTAINER_TYPE || 'memory';
 var REFER;
 
 if(CONTAINER_TYPE === 'firebase'){
-    REFER = 'products';
+    REFER = 'users';
 } else if (CONTAINER_TYPE === 'mongo'){
     const schema = new mongoose.Schema({
-        title: {type: String, required: true, max: 100},
-        price: {type: Number, required: true},
-        thumbnail: {type: String, required: true, max: 100},
+        name: {type: String, required: true, max: 50},
+        alias: {type: String, required: true, max: 10},
+        email: {type: String, required: true, max: 100},
+        password: {type: String, required: true, max: 50},
+        thumbnail: {type: String, max: 100},
         id: {type: Number, required: true},
-        timestamp: {type: Number, required: true}
+        birthdate: {type: Date, required: true}
     });
-    REFER = mongoose.model('products', schema);
+    REFER = mongoose.model('users', schema);
 }
 
 class DAO{

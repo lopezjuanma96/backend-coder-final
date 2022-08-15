@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import DTO from '../dtos/chatDTO.js';
 import ContainerFactory from '../factory.js';
 
-const CONTAINER_TYPE = process.env.CART_CONTAINER_TYPE || 'memory';
+const CONTAINER_TYPE = process.env.CHAT_CONTAINER_TYPE || 'memory';
 var REFER;
 
 if(CONTAINER_TYPE === 'firebase'){

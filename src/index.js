@@ -11,6 +11,7 @@ import { engine } from 'express-handlebars';
 import cartRouter from "./routes/cart.js";
 import chatRouter from "./routes/chat.js";
 import prodRouter from "./routes/products.js";
+import usersRouter from "./routes/users.js";
 
 //logger
 import logger from './utils/logger.js';
@@ -61,6 +62,7 @@ app.set('views', './src/views');
 
 app.use(express.static('./src/public'))
 
+app.use('/users', usersRouter)
 app.use('/products', prodRouter)
 app.use('/chat', chatRouter)
 app.use('/cart', cartRouter)
