@@ -22,6 +22,8 @@ export async function registerPostHandler(req){
     const body = req.body;
     if (!(body.alias && body.password && body.email)){
         throw new Error('Credentials missing');
+    } else if (body.password !== body.passwordRepeat) {
+        throw new Error('Passwords do not coincide');
     }
     const checks = ['email', 'alias']
     const sames = await Promise.all(checks.map(c => dao.getSome(c, body[`${c}`])))
@@ -45,7 +47,7 @@ export async function loginPostHandler(req){
     } else {
         thisUser = await dao.getFirst('email', body.email);
     }
-    if (thisUser.validatePassword(body.password)){
+    if (thisUser.exists() && thisUser.validatePassword(body.password)){
         return { userData: thisUser.getForDb() }
     } else {
         throw new Error('Invalid Credentials!')

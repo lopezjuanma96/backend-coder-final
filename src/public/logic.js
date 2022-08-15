@@ -1,7 +1,7 @@
 const chatMessages = document.querySelector('#chatMessages');
 const productsBlock = document.querySelector('.productsBlock');
 
-const userAlias = document.querySelector('#userAlias').textContent;
+const userAlias = document.querySelector('#userAlias')?.textContent;
 
 if (chatMessages){
     const socket = io()

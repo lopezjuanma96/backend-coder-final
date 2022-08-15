@@ -15,6 +15,7 @@ class DTO{
     getId = () => this.#id;
     getName = () => this.#name;
     getAlias = () => this.#alias;
+    getPassword = () => this.#password;
     getEmail = () => this.#email;
     getThumbnail = () => this.#thumbnail;
     getBirthDate = () => this.#birthdate;
@@ -29,11 +30,16 @@ class DTO{
         return pass === this.#password; //HERE add encryption
     }
 
+    exists(){
+        return (this.#name && this.#password && this.#email)
+    }
+
     getForDb(){
         return {
             id: this.getId(),
             name: this.getName(),
             alias: this.getAlias(),
+            password: this.getPassword(),
             email: this.getEmail(),
             thumbnail: this.getThumbnail(),
             birthdate: this.getBirthDate()
