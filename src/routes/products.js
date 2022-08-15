@@ -1,18 +1,25 @@
-import DAO from '../containers/daos/productsDAO.js';
-import DTO from '../containers/dtos/productsDTO.js';
+import { getHandler, postHandler, putHandler, deleteHandler } from '../controllers/products.js'
 import { Router } from 'express';
 
 import logger from '../utils/logger.js';
 
 const prodRouter = new Router();
-const dao = new DAO();
 
 prodRouter.get('/', (req, res) => {
-    const user = req.session?.user || 'default';
-    dao.getAll()
-    .then(prods => {
-        prods = prods.map(p => p.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
-        res.render('products', { userData: {userAlias: user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} });
+    getHandler(req, res)
+    .then(result => {
+        res.render('products', result);
+    })
+    .catch(err => {
+        logger.error(err.message);   
+        res.render('error', {err});
+    })
+})
+
+prodRouter.get('/api', (req, res) => {
+    getHandler(req, res)
+    .then(result => {
+        res.json(result);
     })
     .catch(err => {
         logger.error(err.message);   
@@ -20,80 +27,36 @@ prodRouter.get('/', (req, res) => {
     })
 })
 
-prodRouter.get('/:id', (req, res) => {
-    dao.getSome('id', req.params.id)
-    .then(prods => {
-        if (prods.length == 1) {
-            res.render('productDetail', {prod: prods[0]})
-        } else {
-            logger.error('invalid ID');   
-            res.json({err: 'invalid ID'});
-        }
-    })
+prodRouter.post('api/add', (req, res) => {
+    postHandler(req)
+    .then(result => res.status(200).json(result))
     .catch(err => {
         logger.error(err.message);   
         res.json({err: err.message});
     })
 })
 
-prodRouter.post('/add', (req, res) => {
-    const prodToAdd = req.body;
-    dao.getSome('id', prodToAdd.id)
-    .then((prods) => {
-        if (prods.length == 0){
-            dao.save(new DTO(prodToAdd))
-            .then((p) => res.redirect('./'))
-        } else if (prods.length == 1){
-            prods[0].stockUp(prodToAdd.stock);
-            dao.save(prods[0])
-            .then((p) => res.redirect('./'))
-        } else {
-            logger.error('invalid request body');   
-            res.json({err: 'invalid request body'});
-        }
-    })
+prodRouter.put('api/addStock', (req, res) => {
+    putHandler(req, false)
+    .then(updated => res.json(updated))
     .catch(err => {
         logger.error(err.message);   
         res.json({err: err.message});
     })
 })
 
-prodRouter.put('/addStock/:id', (req, res) => {
-    const idToModify = req.params.id;
-    const qToAdd = req.query.q > 1 ? req.query.q : 1;
-    dao.getSome('id', idToModify)
-    .then((prods) => {
-        prods[0].stockUp(qToAdd);
-        dao.save(prods[0])
-        .then((p) => res.redirect('./'))
-    })
+prodRouter.put('/subStock', (req, res) => {
+    putHandler(req, true)
+    .then(updated => res.json(updated))
     .catch(err => {
         logger.error(err.message);   
         res.json({err: err.message});
     })
 })
 
-prodRouter.put('/subStock/:id', (req, res) => {
-    const idToModify = req.params.id;
-    const qToSub = req.query.q > 1 ? req.query.q : 1;
-    dao.getSome('id', idToModify)
-    .then((prods) => {
-        prods[0].stockDown(qToSub);
-        dao.save(prods[0])
-        .then((p) => res.redirect('./'))
-    })
-    .catch(err => {
-        logger.error(err.message);   
-        res.json({err: err.message});
-    })
-})
-
-prodRouter.delete('/remove/:id', (req, res) => {
-    const idToDelete = req.params.id;
-    dao.deleteSome('id', idToDelete)
-    .then((del) => {
-        res.redirect('./')
-    })
+prodRouter.delete('/remove', (req, res) => {
+    deleteHandler(req)
+    .then((deleted) => res.json(deleted))
     .catch(err => {
         logger.error(err.message);   
         res.json({err: err.message});

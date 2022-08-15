@@ -61,9 +61,9 @@ app.set('views', './src/views');
 
 app.use(express.static('./src/public'))
 
-app.use('/api/products', prodRouter)
-app.use('/api/chat', chatRouter)
-app.use('/api/cart', cartRouter)
+app.use('/products', prodRouter)
+app.use('/chat', chatRouter)
+app.use('/cart', cartRouter)
 
 http.listen(PORT, () => {
     if (process.env.NODE_ENV == "DEV"){

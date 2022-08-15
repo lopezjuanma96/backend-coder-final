@@ -1,89 +1,52 @@
 import { Router } from "express";
-import CartDAO from '../containers/daos/cartDAO.js'
-import ProductsDAO from '../containers/daos/cartDAO.js'
+import { getHandler, postHandler, deleteHandler } from "../controllers/cart.js";
 
 import logger from '../utils/logger.js';
 
 const cartRouter = new Router();
-const cartDAO = new CartDAO();
-const productsDAO = new ProductsDAO();
 
 cartRouter.get('/', (req, res) => {
-    const user = req.session?.user || 'default';
-    cartDAO.getFirst('user', user)
-    .then(cart => {
-        cart = cart.getForDb();
-        if (cart.products.length > 0) {
-            const cartProductsId = Object.keys(cart.products)
-            const cartProductsAmt = Object.values(cart.products)
-            Promise.all(cartProductsId.map(pId => productsDAO.getSome(pId)))
-            .then(cartProductsData => {
-                const cartProducts = []
-                var cartTotalPrice;
-                for (let i=0; i<cartProductsData.length; i++){
-                    cartProducts.push( { ...cartProductsData[i].getForDb(), stock: cartProductsAmt[i] } )
-                    cartTotalPrice += cartProducts[i].price*cartProducts[i].stock;
-                }
-                res.status(200).render('cart', { 
-                                        userData: {userAlias: user}, 
-                                        cartData: {items: cartProducts, exists: cartProducts.length > 0, total: cartTotalPrice}
-                                    })
-            })
-        } else {
-            res.status(200).render('cart', { 
-                userData: {userAlias: user}, 
-                cartData: {exists: false}
-            })
-        }
-    })
+    getHandler(req)
+    .then(results => res.render('cart', results))
     .catch(err => {
         logger.error(err.message);
-        res.status(404).json({error: err.message});
+        res.render('error', {err});
     })
 })
 
-cartRouter.post('/add', (req, res) => {
-    const user = req.session?.user;
-    const prodId = req.query.id;
-    cartDAO.getFirst('user', user)
-    .then(cart => {
-        cart.addProduct(prodId);
-        cartDAO.save(cart)
-        .then(updated => res.redirect('./'))
-    })
+cartRouter.get('/api', (req, res) => {
+    getHandler(req)
+    .then(results => res.json(results))
     .catch(err => {
         logger.error(err.message);
-        res.status(404).json({error: err.message});
+        res.json({error: err.message});
     })
 })
 
-cartRouter.delete('/remove', (req, res) => {
-    const user = req.session?.user;
-    const prodId = req.query.id;
-    cartDAO.getFirst('user', user)
-    .then(cart => {
-        cart.removeProduct(prodId);
-        cartDAO.save(cart)
-        .then(updated => res.redirect('./'))
-    })
+cartRouter.post('/api/add', (req, res) => {
+    postHandler(req)
+    .then(results => res.json(results))
     .catch(err => {
         logger.error(err.message);
-        res.status(404).json({error: err.message});
+        res.json({error: err.message});
     })
 })
 
-cartRouter.delete('/empty', (req, res) => {
-    const user = req.session?.user;
-    const prodId = req.query.id;
-    cartDAO.getFirst('user', user)
-    .then(cart => {
-        cart.emptyProducts();
-        cartDAO.save(cart)
-        .then(updated => res.redirect('./'))
-    })
+cartRouter.delete('/api/remove', (req, res) => {
+    deleteHandler(req, false)
+    .then(results => res.json(results))
     .catch(err => {
         logger.error(err.message);
-        res.status(404).json({error: err.message});
+        res.json({error: err.message});
+    })
+})
+
+cartRouter.delete('api/empty', (req, res) => {
+    deleteHandler(req, true)
+    .then(results => res.json(results))
+    .catch(err => {
+        logger.error(err.message);
+        res.json({error: err.message});
     })
 })
 
