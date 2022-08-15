@@ -4,6 +4,15 @@ import logger from "../utils/logger.js";
 
 const usersRouter = new Router();
 
+usersRouter.get('/home', (req, res) => {
+    const user = req.session?.user;
+    if (user) {
+        res.render('home', { userData: {...user, exists: true}});
+    } else {
+        res.render('home', { userData: {exists: false}})
+    }
+})
+
 usersRouter.get('/register', (req, res) => {
     res.render('register');
 })

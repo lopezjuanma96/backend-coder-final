@@ -66,6 +66,7 @@ app.use('/users', usersRouter)
 app.use('/products', prodRouter)
 app.use('/chat', chatRouter)
 app.use('/cart', cartRouter)
+app.get('*', (req, res) => res.redirect('/users/home'))
 
 http.listen(PORT, () => {
     if (process.env.NODE_ENV == "DEV"){
