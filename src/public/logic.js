@@ -11,20 +11,20 @@ if (chatMessages){
     
     socket.on('chatMessages', (msgs) => {
         chatMessages.innerHTML = msgs.map((m) => `
-            <div class=chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}>
-                <b>${userAlias === m.user ? 'You:' : m.user}</b><br>
-                <p>${m.text}</p><br>
-                <i>${m.date}</i>
+            <div class=\"chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}\">
+                <b>${userAlias === m.user ? 'You:' : m.user}</b>
+                <p>${m.text}</p>
+                <i>${(new Date(m.date)).toDateString()}</i>
                 </div>
                 `).join('\n')
             })
             
             socket.on('newChatMessageUpdate', (m) => {
                 chatMessages.innerHTML += `
-                <div class=chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}>
-                <b>${userAlias === m.user ? 'You:' : m.user}</b><br>
-                <p>${m.text}</p><br>
-                <i>${m.date}</i>
+                <div class=\"chatMessagesItem${userAlias === m.user ? ' chatMessagesItemUser' : ''}\">
+                <b>${userAlias === m.user ? 'You:' : m.user}</b>
+                <p>${m.text}</p>
+                <i>${(new Date(m.date)).toDateString()}</i>
             </div>
             `
         })

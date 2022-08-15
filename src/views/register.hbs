@@ -1,24 +1,24 @@
 <h2>Join our community! Create your account now:</h2>
 
 <form class="registerForm" action="/users/register" method="POST">
-    <label class="registerFormLabel">Name</label>
-    <input class="registerFormInput" name="name" type="text">
-    <label class="registerFormLabel">Email</label>
-    <input class="registerFormInput" name="email" type="email">
-    <label class="registerFormLabel">Image:</label>
-    <input class="registerFormInput" name="thumbnail" type="image">
-    <label class="registerFormLabel">Alias</label>
-    <input class="registerFormInput" name="alias" type="text">
-    <label class="registerFormLabel">Password</label>
-    <input class="registerFormInput" name="password" type="password">
-    <label class="registerFormLabel">Repeat Password</label>
-    <input class="registerFormInput" name="passwordRepeat" type="password">
-    <label class="registerFormLabel">Birthdate</label>
-    <input class="registerFormInput" name="birthdate" type="date">
-    <div class="registerFormButtons">
-        <button id="registerFormSubmitButton" type="submit">Register</button>
-        <button id="registerFormResetButton" type="reset">Clear</button>
+    <label class="formLabel">Name</label>
+    <input class="formInput" name="name" type="text">
+    <label class="formLabel">Email</label>
+    <input class="formInput" name="email" type="email">
+    <label class="formLabel">Image</label>
+    <input class="formInput formInputImage" name="thumbnail" type="file" accept="image/png, image/jpeg">
+    <label class="formLabel">Alias</label>
+    <input class="formInput" name="alias" type="text">
+    <label class="formLabel">Password</label>
+    <input class="formInput" name="password" type="password">
+    <label class="formLabel">Repeat Password</label>
+    <input class="formInput" name="passwordRepeat" type="password">
+    <label class="formLabel">Birthdate</label>
+    <input class="formInput" name="birthdate" type="date">
+    <div class="buttonRow">
+        <button class="basicButton greenButton" type="submit">Register</button>
+        <button class="basicButton blueButton" type="reset">Clear</button>
     </div>
 </form>
 
-<button type="button" class="goBackButton"><a href="/home">Go Back</a></button>
+<a href="/"><button type="button" class="basicButton redButton">Go Back</button></a>

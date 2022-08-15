@@ -1,19 +1,19 @@
-<h2><span id="userAlias">{{userData.userAlias}}</span> this is our catalogue!</h2>
+<h2><span id="userAlias">{{userData.alias}}</span> this is our catalogue!</h2>
 
 {{#if userData.isAdmin}}
 <h2>New Product:</h2>
 <form class="addProductForm" id="addProductForm">
-    <label class="addProductFormLabel">Name:</label>
-    <input class="addProductFormInput" name="name">
-    <label class="addProductFormLabel">Price:</label>
-    <input class="addProductFormInput" name="price">
-    <label class="addProductFormLabel">Image:</label>
-    <input class="addProductFormInput" name="thumbnail" type="image">
-    <label class="addProductFormLabel">Stock:</label>
-    <input class="addProductFormInput" name="stock">
-    <div class="addProductFormButtons">
-        <button class="addProductFormSendButton" id="addProductFormSendButton" type="button">Add</button>
-        <button class="addProductFormResetButton" type="reset">Clear</button>
+    <label class="formLabel">Name:</label>
+    <input class="formInput" name="name">
+    <label class="formLabel">Price:</label>
+    <input class="formInput" name="price">
+    <label class="formLabel">Image:</label>
+    <input class="formInput formInputImage" name="thumbnail" type="file" accept="image/png, image/jpeg">
+    <label class="formLabel">Stock:</label>
+    <input class="formInput" name="stock">
+    <div class="buttonRow">
+        <button class="basicButton greenButton" id="addProductFormSendButton" type="button">Add</button>
+        <button class="basicButton blueButton" type="reset">Clear</button>
     </div>
 </form>
 {{/if}}
@@ -39,8 +39,8 @@
     {{else}}
     <h2 class="noProductsTitle">No products available!</h2>
     {{/if}}
-    <table id="addedProducts">
+    <table class="productsTable addedProducts" id="productsTable">
     </table>
 </div>
 
-<button type="button" class="goBackButton"><a href="/home">Go Back</a></button>
+<a href="/"><button type="button" class="basicButton redButton">Go Back</button></a>

@@ -1,15 +1,15 @@
 {{#if userData.exists}}
 <h2>Welcome {{userData.alias}}</h2>
-<div class="homeButtons">
-    <button class="homeButtonProducts"><a href="/products">Shop</a></button>
-    <button class="homeButtonCart"><a href="/cart">Cart</a></button>
-    <button class="homeButtonChat"><a href="/chat">Chat</a></button>
-    <button class="homeButtonLogout"><a href="/users/logout">Logout</a></button>
+<div class="buttonRow">
+    <a href="/products"><button class="basicButton greenButton">Shop</button></a>
+    <a href="/cart"><button class="basicButton blueButton">Cart</button></a>
+    <a href="/chat"><button class="basicButton orangeButton">Chat</button></a>
+    <a href="/users/logout"><button class="basicButton redButton">Logout</button></a>
 </div>
 {{else}}
 <h2>Welcome to our E-commerce</h2>
-<div class="homeButtons">
-    <button class="homeButtonLogin"><a href="/users/login">Sign in</a></button>
-    <button class="homeButtonRegister"><a href="/users/register">Sign up</a></button>
+<div class="buttonRow">
+    <a href="/users/login"><button class="basicButton greenButton">Sign in</button></a>
+    <a href="/users/register"><button class="basicButton blueButton">Sign up</button></a>
 </div>
 {{/if}}

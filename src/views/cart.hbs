@@ -1,9 +1,9 @@
-<h2>This is your cart {{userData.userAlias}}</h2>
+<h2>This is your cart {{userData.alias}}</h2>
 
 <div class="cartBlock">
     {{#if cartData.exists}}
     <div class="cartItems">
-        <table class="cartItemsTable" id="cartItemsTable">
+        <table class="productsTable" id="cartItemsTable">
             <tr>
                 <th>Name</th>
                 <th>Stock</th>
@@ -18,7 +18,7 @@
         {{/each}}
         </table>
     </div>
-    <div class="cartButtons">
+    <div class="buttonRow">
         <h2>Total: <span>{{cartData.total}}</span></h2>
         <button class="cartButtonBuy" type="button">Buy</button>
         <button class="cartButtonEmpty" type="button">Empty</button>
@@ -28,4 +28,4 @@
     {{/if}}
 </div>
 
-<button type="button" class="goBackButton"><a href="/home">Go Back</a></button>
+<a href="/"><button type="button" class="basicButton redButton">Go Back</button></a>

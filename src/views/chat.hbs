@@ -1,14 +1,14 @@
-<h2>Welcome to chat <span id="userAlias">{{userData.userAlias}}</span></h2>
+<h2>Welcome to chat <span id="userAlias">{{userData.alias}}</span></h2>
 
 <div class="chatBlock">
     <div class="chatMessages" id="chatMessages"></div>
     <form class="chatInputForm">
-        <input class="chatInput" id="chatInput" placeholder="Enter your message here..">
-        <div class="chatInputButtons">
-            <button class="chatInputButtonSend" id="chatInputButtonSend" type="button">Send</button>
-            <button class="chatInputButtonClear" id="chatInputButtonClear" type="reset">Reset</button>
+        <input class="formInput chatInput" id="chatInput" placeholder="Enter your message here..">
+        <div class="buttonColumn chatInputFormButtons">
+            <button class="basicButton greenButton" id="chatInputButtonSend" type="button">Send</button>
+            <button class="basicButton blueButton" id="chatInputButtonClear" type="reset">Reset</button>
         </div>
     </form>
 </div>
 
-<button type="button" class="goBackButton"><a href="/home">Go Back</a></button>
+<a href="/"><button type="button" class="basicButton redButton">Go Back</button></a>
