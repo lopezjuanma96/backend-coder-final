@@ -57,21 +57,37 @@ if (chatMessages){
 
 if (productsBlock) {
     const socket = io()
-    const addedProducts = document.querySelector('#addedProducts'); 
+    const addedProducts = document.querySelector('#addedProducts');
+    const productsTable = document.querySelector('#productsTable');
     const productsSendButton = document.querySelector('#addProductFormSendButton');
     const addProductForm = document.querySelector('#addProductForm');
     socket.on('newProductUpdate', (prod) => {
         if (addedProducts.childElementCount === 0) {
-            addedProducts.innerHTML += '<h2>You added this products:</h2>'    
+            addedProducts.innerHTML += `
+                <h2>You added this products:</h2>
+                <tr>
+                    <th>Name</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                </tr>
+            `    
         }
         addedProducts.innerHTML += `
-        <tr>
-        <td>${prod.name}</td>
-        <td>${prod.stock}</td>
+            <tr>
+                <td>${prod.name}</td>
+                <td>${prod.stock}</td>
                 <td>${prod.price}</td>
-                <td>${prod.thumbnail}</td>
             </tr>
-        `
+            `
+        if(productsTable){
+            productsTable.innerHTML +=`
+                <tr>
+                    <td>${prod.name}</td>
+                    <td>${prod.stock}</td>
+                    <td>${prod.price}</td>
+                </tr>
+            `
+        }
     })
     if (productsSendButton) {
         productsSendButton.addEventListener('click', (e) => {

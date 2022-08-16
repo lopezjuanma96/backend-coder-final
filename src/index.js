@@ -16,12 +16,11 @@ import usersRouter from "./routes/users.js";
 //logger
 import logger from './utils/logger.js';
 
-//dao
+//data
 import ChatDAO from './containers/daos/chatDAO.js';
 import ChatDTO from './containers/dtos/chatDTO.js';
 
-import ProdDAO from './containers/daos/productsDAO.js';
-import ProdDTO from './containers/dtos/productsDTO.js';
+import { postHandler as prodPostHandler } from './controllers/products.js';
 
 //env
 import dotenv from 'dotenv';
@@ -41,7 +40,6 @@ const io = new Io(http);
 const PORT = process.env.PORT || 8080;
 
 const chatDAO = new ChatDAO();
-const prodDAO = new ProdDAO();
 
 //----------- END CONSTANTS --------------
 
@@ -108,17 +106,13 @@ io.on('connection', (socket) => {
         });
     });
     socket.on('newProductInput', (prod) => {
-        prodDAO.save( new ProdDTO({
-            id : prod.id,
-            name : prod.name,
-            price : prod.price,
-            stock : prod.stock,
-            thumbnail : prod.thumbnail,
+        prodPostHandler({ body: {
+            ...prod,
             creation : Date.now(),
             lastUpdate : Date.now()
-        }))
+        }})
         .then((saved) => {
-            socket.emit('newProductUpdate', saved.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+            socket.emit('newProductUpdate', saved); //HERE im not being able to serialize the DTO, so for what is it worth?
         });
     })
 })
