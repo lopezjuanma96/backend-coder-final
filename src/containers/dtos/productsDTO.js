@@ -27,6 +27,10 @@ class DTO{
     stockUp = (val) => this.#stock += val;
     stockDown = (val) => this.#stock -= val;
 
+    exists(){
+        return (this.#name && this.#price && this.#stock)
+    }
+
     getForDb(){
         return {
             id: this.getId(),

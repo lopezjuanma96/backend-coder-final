@@ -55,7 +55,7 @@ class DAO{
         } else {
             got = await this.container.getByAttr(key, val);
         }
-        return new DTO(got[0]);
+        return new DTO(got[0] || {});
     }
 
     async deleteAll(){
