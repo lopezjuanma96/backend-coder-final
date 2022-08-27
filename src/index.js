@@ -4,6 +4,10 @@ import express from 'express'
 import { Server as Io } from 'socket.io';
 import { Server as Http } from 'http';
 
+//graphql
+import { graphqlHTTP } from 'express-graphql';
+import graphqlSchema from './graphql/main.js';
+
 //views
 import { engine } from 'express-handlebars';
 
@@ -72,6 +76,11 @@ app.use('/users', usersRouter)
 app.use('/products', prodRouter)
 app.use('/chat', chatRouter)
 app.use('/cart', cartRouter)
+app.use('/graphql',
+        graphqlHTTP({
+            schema: graphqlSchema,
+            graphiql: true
+        }))
 app.get('*', (req, res) => res.redirect('/users/home'))
 
 http.listen(PORT, () => {
