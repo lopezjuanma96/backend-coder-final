@@ -31,6 +31,10 @@ class DTO{
         return counts;
     }
 
+    exists(){
+        return (this.#user && this.#products)
+    }
+
     getForDb(){
         return {
             id: this.getId(),

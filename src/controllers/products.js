@@ -4,7 +4,7 @@ import DTO from '../containers/dtos/productsDTO.js';
 const dao = new DAO();
 
 export async function getHandler(req){
-    const user = req.session?.user || 'default';
+    const user = req.session?.user;
     const id = req.query.id;
     if(id){
         var prod = await dao.getFirst('id', id);
@@ -16,20 +16,20 @@ export async function getHandler(req){
     } else {
         var prods = await dao.getAll()
         prods = prods.map(p => p.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
-        return { userData: {userAlias: user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} }
+        return { userData: {...user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} }
     }
 }
 
 export async function postHandler(req){
     const prodToAdd = req.body;
     const prod = await dao.getFirst('id', prodToAdd.id)
-    if (prod) {
+    if (prod.exists()) {
         prod.stockUp(prodToAdd.stock);
         await dao.save(prod)
         return prod;
     } else {
         await dao.save(new DTO(prodToAdd))
-        return prod;
+        return prodToAdd;
     }
 }
 

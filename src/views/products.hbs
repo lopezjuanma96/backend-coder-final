@@ -19,7 +19,7 @@
 {{/if}}
 
 <div class="productsBlock">
-    {{#if productData.exists}}
+    {{#if prodData.exists}}
     <table class="productsTable" id="productsTable">
         <tr>
             <th>Name</th>
@@ -27,7 +27,7 @@
             <th>Price</th>
             <th>Image</th>
         </tr>
-        {{#each productData.prod}}
+        {{#each prodData.prods}}
         <tr>
             <td>{{this.name}}</td>
             <td>{{this.stock}}</td>
@@ -39,7 +39,7 @@
     {{else}}
     <h2 class="noProductsTitle">No products available!</h2>
     {{/if}}
-    <table class="productsTable addedProducts" id="productsTable">
+    <table class="productsTable addedProducts" id="addedProducts">
     </table>
 </div>
 

@@ -4,6 +4,10 @@ import express from 'express'
 import { Server as Io } from 'socket.io';
 import { Server as Http } from 'http';
 
+//graphql
+import { graphqlHTTP } from 'express-graphql';
+import graphqlSchema from './graphql/main.js';
+
 //views
 import { engine } from 'express-handlebars';
 
@@ -16,12 +20,9 @@ import usersRouter from "./routes/users.js";
 //logger
 import logger from './utils/logger.js';
 
-//dao
-import ChatDAO from './containers/daos/chatDAO.js';
-import ChatDTO from './containers/dtos/chatDTO.js';
-
-import ProdDAO from './containers/daos/productsDAO.js';
-import ProdDTO from './containers/dtos/productsDTO.js';
+//data
+import { postHandler as chatPostHandler } from './controllers/chat.js';
+import { postHandler as prodPostHandler } from './controllers/products.js';
 
 //env
 import dotenv from 'dotenv';
@@ -39,9 +40,6 @@ const app = express();
 const http = new Http(app);
 const io = new Io(http);
 const PORT = process.env.PORT || 8080;
-
-const chatDAO = new ChatDAO();
-const prodDAO = new ProdDAO();
 
 //----------- END CONSTANTS --------------
 
@@ -78,6 +76,11 @@ app.use('/users', usersRouter)
 app.use('/products', prodRouter)
 app.use('/chat', chatRouter)
 app.use('/cart', cartRouter)
+app.use('/graphql',
+        graphqlHTTP({
+            schema: graphqlSchema,
+            graphiql: true
+        }))
 app.get('*', (req, res) => res.redirect('/users/home'))
 
 http.listen(PORT, () => {
@@ -93,32 +96,25 @@ http.listen(PORT, () => {
 
 io.on('connection', (socket) => {
     logger.info(`New user connected!`);
-    chatDAO.getAll()
-    .then((msgs) => socket.emit('chatMessages', msgs.map(m => m.getForDb()))) //HERE im not being able to serialize the DTO, so for what is it worth?
-    .catch((err) => logger.error(err.message));
     socket.on('newChatMessageInput', (msg) => {
-        chatDAO.save(new ChatDTO({
-            //can w include id
-            user: msg.user,
-            text: msg.text,
-            date: Date.now()
-        }))
-        .then((saved) => {
-            socket.emit('newChatMessageUpdate', saved.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+        chatPostHandler({
+            body: {
+                user: msg.user,
+                text: msg.text
+            }
+        })
+        .then((result) => {
+            socket.emit('newChatMessageUpdate', result);
         });
     });
     socket.on('newProductInput', (prod) => {
-        prodDAO.save( new ProdDTO({
-            id : prod.id,
-            name : prod.name,
-            price : prod.price,
-            stock : prod.stock,
-            thumbnail : prod.thumbnail,
+        prodPostHandler({ body: {
+            ...prod,
             creation : Date.now(),
             lastUpdate : Date.now()
-        }))
-        .then((saved) => {
-            socket.emit('newProductUpdate', saved.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+        }})
+        .then((result) => {
+            socket.emit('newProductUpdate', result); 
         });
     })
 })

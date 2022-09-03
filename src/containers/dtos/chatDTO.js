@@ -14,6 +14,10 @@ class DTO{
     getText = () => this.#text;
     getDate = () => this.#date;
 
+    exists(){
+        return (this.#user && this.#text)
+    }
+
     getForDb(){
         return {
             id: this.getId(),
