@@ -1,14 +1,17 @@
+import { validate } from '../../models/products.js'
+
 class DTO{
     #id; #name; #price; #stock; #thumbnail; #creation; #lastUpdate;
 
     constructor(obj){
-        this.#id = obj.id;
-        this.#name = obj.name;
-        this.#price = obj.price;
-        this.#stock = obj.stock;
-        this.#thumbnail = obj.thumbnail;
-        this.#creation = obj.created;
-        this.#lastUpdate = obj.updated;
+        this.id = obj.id;
+        this.name = obj.name;
+        this.price = obj.price;
+        this.stock = obj.stock;
+        this.thumbnail = obj.thumbnail;
+        this.creation = obj.created;
+        this.lastUpdate = obj.updated;
+        validate(this)
     }
 
     //GETTERS

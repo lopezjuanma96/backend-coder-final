@@ -1,12 +1,15 @@
+import { validate } from '../../models/cart.js'
+
 class DTO{
     #id; #user; #products; #creation; #lastUpdate;
 
     constructor(obj){
-        this.#id = obj.id;
-        this.#user = obj.user;
-        this.#products = obj.products || [];
-        this.#creation = obj.created;
-        this.#lastUpdate = obj.updated;
+        this.id = obj.id;
+        this.user = obj.user;
+        this.products = obj.products || [];
+        this.creation = obj.created;
+        this.lastUpdate = obj.updated;
+        validate(this);
     }
 
     //GETTERS

@@ -9,11 +9,13 @@ if(CONTAINER_TYPE === 'firebase'){
     REFER = 'products';
 } else if (CONTAINER_TYPE === 'mongo'){
     const schema = new mongoose.Schema({
-        title: {type: String, required: true, max: 100},
-        price: {type: Number, required: true},
-        thumbnail: {type: String, required: true, max: 100},
         id: {type: Number, required: true},
-        timestamp: {type: Number, required: true}
+        name: {type: String, required: true, max: 100},
+        price: {type: Number, required: true},
+        stock: {type: Number, required: true},
+        thumbnail: {type: String, required: true, max: 100},
+        creation: {type: Date, required: true},
+        lastUpdate: {type: Date, required: true}
     });
     REFER = mongoose.model('products', schema);
 }

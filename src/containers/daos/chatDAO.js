@@ -13,7 +13,7 @@ if(CONTAINER_TYPE === 'firebase'){
         socket: {type: String, required: true, max: 100},
         user: {type: String, required: true, max: 50},
         msg: {type: String, max: 255},
-        date: {type: Date}
+        date: {type: Date, required: true}
     });
     REFER = mongoose.model('chat', schema);
 }

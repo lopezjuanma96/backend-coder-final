@@ -1,21 +1,19 @@
-import DAO from '../containers/daos/usersDAO.js';
-import DTO from '../containers/dtos/usersDTO.js';
-
-const dao = new DAO();
+import { getAllUsers, getOneUserByAlias, getOneUserById, 
+    registerNewUser, loginUser, 
+    updateUserByAlias, updateUserById, 
+    deleteUserByAlias, deleteUserById 
+} from '../services/users.js'
 
 export async function getHandler(req){
     const id = req.query.id;
     const alias = req.query.alias;
-    if (alias) {
-        const user = await dao.getFirst('alias', alias);
-        return user.getForDb();
-    } else if (id) {
-        const user = await dao.getFirst('id', id);
-        return user.getForDb();
-    } else {
-        const users = await dao.getAll();
-        return users.map(u => u.getForDb())
-    }
+    var data;
+
+    if (alias) data = await getOneUserByAlias(alias);
+    else if (id) data = await getOneUserById(id);
+    else data = await getAllUsers();
+
+    return data;
 }
 
 export async function logoutGetHandler(req){
@@ -44,8 +42,8 @@ export async function registerPostHandler(req){
     const sames = await Promise.all(checks.map(c => dao.getSome(c, body[`${c}`])))
     const unavailable = sames.map((v, i) => [checks[i], v]).filter(s => s[1].length > 0)
     if (unavailable.length == 0) {
-        await dao.save(new DTO(body));
-        return { userData: body }
+        const data = await registerNewUser();
+        return data;
     } else {
         throw new Error(`${unavailable.map(a => a[0]).join(' & ')} are already in use. Choose a different value for them`);
     }
@@ -56,16 +54,9 @@ export async function loginPostHandler(req){
     var thisUser;
     if (!((body.alias || body.email) && body.password)){
         throw new Error('Credentials missing');
-    }
-    if (body.alias){
-        thisUser = await dao.getFirst('alias', body.alias);
     } else {
-        thisUser = await dao.getFirst('email', body.email);
-    }
-    if (thisUser.exists() && thisUser.validatePassword(body.password)){
-        return { userData: thisUser.getForDb() }
-    } else {
-        throw new Error('Invalid Credentials!')
+        const data = await loginUser(body);
+        return data;
     }
 }
 
@@ -74,29 +65,24 @@ export async function putHandler(req){
     const alias = req.query.alias;
     const body = req.body;
     if (alias) {
-        const user = await dao.getFirst('alias', alias);
-        const updated = {...user, ...body}
-        await dao.save(new DTO(updated))
-        return updated;
+        const data = await updateUserByAlias(alias, body)
     } else if (id) {
-        const user = await dao.getFirst('id', id);
-        const updated = {...user, ...body}
-        await dao.save(new DTO(updated))
-        return updated;
+        const data = await updateUserById(id, body)
     } else {
         throw new Error('No alias or ID provided')
     }
+    return data;
 }
 
 export async function deleteHandler(req){
     const id = req.query.id;
     const alias = req.query.alias;
     if (alias) {
-        const user = await dao.deleteSome('alias', alias);
-        return user.getForDb();
+        const data = await deleteUserByAlias(alias);
+        return data;
     } else if (id) {
-        const user = await dao.deleteSome('id', id);
-        return user.getForDb();
+        const data = await deleteUserById(id);
+        return data;
     } else {
         throw new Error('No alias or ID provided')
     }

@@ -1,11 +1,15 @@
+import { validate } from '../../models/chat.js'
+
 class DTO{
     #id; #user; #text; #date;
 
     constructor(obj){
-        this.#id = obj.id;
-        this.#user = obj.user;
-        this.#text = obj.text;
-        this.#date = obj.date;
+        this.id = obj.id;
+        this.socket = obj.socket;
+        this.user = obj.user;
+        this.msg = obj.text;
+        this.date = obj.date;
+        validate(this)
     }
 
     //GETTERS

@@ -32,6 +32,9 @@ import path from 'path';
 import session from 'express-session';
 import cookies from 'cookie-parser';
 
+//cors
+import cors from 'cors';
+
 //----------- END IMPORTS --------------
 
 //------------- CONSTANTS ----------------
@@ -71,6 +74,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+app.use(cors);
+
+//routes
 
 app.use('/users', usersRouter)
 app.use('/products', prodRouter)
@@ -90,7 +96,7 @@ http.listen(PORT, () => {
         logger.info(`Persistance on Cart: ${process.env.CART_CONTAINER_TYPE}`);
         logger.info(`Persistance on Chat: ${process.env.CHAT_CONTAINER_TYPE}`);
     } else {
-        logger.info('Server up in http://localhost:${PORT}');
+        logger.info(`Server up in http://localhost:${PORT}`);
     }
 })
 

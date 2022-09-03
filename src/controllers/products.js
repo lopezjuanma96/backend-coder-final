@@ -1,57 +1,45 @@
-import DAO from '../containers/daos/productsDAO.js';
-import DTO from '../containers/dtos/productsDTO.js';
-
-const dao = new DAO();
+import { getOneProductById, getAllProducts, 
+    addProduct, 
+    moreProduct, lessProduct,
+    deleteProduct 
+} from '../services/products.js'
 
 export async function getHandler(req){
     const user = req.session?.user;
     const id = req.query.id;
+
     if(id){
-        var prod = await dao.getFirst('id', id);
-        if(prod){
-            return prod.getForDb();
-        } else {
-            throw new Error('Invalid Product ID');
-        }
+        const data = await getOneProductById(id);
+        return { userData: {...user, isAdmin: true}, prodData: {data, exists: true} }
     } else {
-        var prods = await dao.getAll()
-        prods = prods.map(p => p.getForDb()); //HERE im not being able to serialize the DTO, so for what is it worth?
+        const prods = await getAllProducts();
         return { userData: {...user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} }
     }
 }
 
 export async function postHandler(req){
     const prodToAdd = req.body;
-    const prod = await dao.getFirst('id', prodToAdd.id)
-    if (prod.exists()) {
-        prod.stockUp(prodToAdd.stock);
-        await dao.save(prod)
-        return prod;
-    } else {
-        await dao.save(new DTO(prodToAdd))
-        return prodToAdd;
-    }
+
+    const data = await addProduct(prodToAdd);
+
+    return data;
 }
 
 export async function putHandler(req, substract){
     const id = req.query.id;
     const q = req.query.q > 1 ? req.query.q : 1;
-    const prod = await dao.getFirst('id', id);
-    if (prod) {
-        if (substract) {
-            prod.stockDown(q);
-        } else {
-            prod.stockUp(q);
-        }
-        await dao.save(prod);
-        return prod;
-    } else {
-        throw new Error('Invalid product ID')
-    }
+    var data;
+    
+    if (substract) data = lessProduct(id, q);
+    else data = moreProduct(id, q);
+
+    return data
 }
 
 export async function deleteHandler(req){
     const id = req.query.id;
-    const deleted = await dao.deleteSome('id', id);
-    return deleted;
+
+    const data = await deleteProduct(id);
+
+    return data;
 }
