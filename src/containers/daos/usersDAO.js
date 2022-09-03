@@ -9,12 +9,12 @@ if(CONTAINER_TYPE === 'firebase'){
     REFER = 'users';
 } else if (CONTAINER_TYPE === 'mongo'){
     const schema = new mongoose.Schema({
+        id: {type: Number, required: true},
         name: {type: String, required: true, max: 50},
         alias: {type: String, required: true, max: 10},
         email: {type: String, required: true, max: 100},
-        password: {type: String, required: true, max: 50},
         thumbnail: {type: String, max: 100},
-        id: {type: Number, required: true},
+        password: {type: String, required: true, max: 50},
         birthdate: {type: Date, required: true}
     });
     REFER = mongoose.model('users', schema);

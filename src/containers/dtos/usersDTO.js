@@ -1,14 +1,17 @@
+import { validate } from "../../models/users.js";
+
 class DTO{
     #id; #name; #alias; #email; #thumbnail; #password; #birthdate;
 
     constructor(obj){
-        this.#id = obj.id;
-        this.#name = obj.name;
-        this.#alias = obj.alias;
-        this.#email = obj.email;
-        this.#thumbnail = obj.thumbnail;
-        this.#password = obj.password;
-        this.#birthdate = obj.birthdate;
+        this.id = obj.id;
+        this.name = obj.name;
+        this.alias = obj.alias;
+        this.email = obj.email;
+        this.thumbnail = obj.thumbnail;
+        this.password = obj.password;
+        this.birthdate = obj.birthdate;
+        validate(this)
     }
 
     //GETTERS

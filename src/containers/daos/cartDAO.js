@@ -11,7 +11,9 @@ if(CONTAINER_TYPE === 'firebase'){
     const schema = new mongoose.Schema({
         productos: {type: [Number]},
         id: {type: Number, required: true},
-        timestamp: {type: Number, required: true}
+        user: {type: String, required: true, max: 50},
+        creation: {type: Date, required: true},
+        lastUpdate: {type: Date, required: true}
     });
     REFER = mongoose.model('cart', schema);
 }
