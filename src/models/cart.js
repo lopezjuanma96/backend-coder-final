@@ -1,11 +1,11 @@
 import JOI from 'joi';
 
 const schema = JOI.object({
+    //id: JOI.number().required(),
     productos: [JOI.number()],
-    id: JOI.number().required(),
     user: JOI.string().required().max(50),
     creation: JOI.date().required(),
-    lastUpdate: JOI.date().required()
+    updated: JOI.date().required()
 })
 
 export async function validate(data){

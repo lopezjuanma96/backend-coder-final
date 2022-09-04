@@ -1,7 +1,7 @@
 import { validate } from "../../models/users.js";
 
 class DTO{
-    #id; #name; #alias; #email; #thumbnail; #password; #birthdate;
+    id; name; alias; email; thumbnail; password; birthdate;
 
     constructor(obj){
         this.id = obj.id;
@@ -11,30 +11,29 @@ class DTO{
         this.thumbnail = obj.thumbnail;
         this.password = obj.password;
         this.birthdate = obj.birthdate;
-        validate(this)
     }
 
     //GETTERS
-    getId = () => this.#id;
-    getName = () => this.#name;
-    getAlias = () => this.#alias;
-    getPassword = () => this.#password;
-    getEmail = () => this.#email;
-    getThumbnail = () => this.#thumbnail;
-    getBirthDate = () => this.#birthdate;
+    getId = () => this.id;
+    getName = () => this.name;
+    getAlias = () => this.alias;
+    getPassword = () => this.password;
+    getEmail = () => this.email;
+    getThumbnail = () => this.thumbnail;
+    getBirthDate = () => this.birthdate;
     
     //SETTERS
-    setName = (val) => this.#name = val;
-    setEmail = (val) => this.#email = val;
-    setThumbnail = (val) => this.#thumbnail = val;
-    setBirthDate = (val) => this.#birthdate = val;
+    setName = (val) => this.name = val;
+    setEmail = (val) => this.email = val;
+    setThumbnail = (val) => this.thumbnail = val;
+    setBirthDate = (val) => this.birthdate = val;
 
     validatePassword(pass){
-        return pass === this.#password; //HERE add encryption
+        return pass === this.password; //HERE add encryption
     }
 
     exists(){
-        return (this.#name && this.#password && this.#email)
+        return (this.name && this.password && this.email)
     }
 
     getForDb(){

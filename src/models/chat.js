@@ -1,7 +1,7 @@
 import JOI from 'joi';
 
 const schema = JOI.object({
-    id: JOI.number().required(),
+    //id: JOI.number().required(),
     socket: JOI.string().required().max(100),
     user: JOI.string().required().max(50),
     msg: JOI.string().required().max(255),

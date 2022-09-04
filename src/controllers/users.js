@@ -1,5 +1,5 @@
 import { getAllUsers, getOneUserByAlias, getOneUserById, 
-    registerNewUser, loginUser, 
+    registerNewUser, loginUser, checkUserAvailable,
     updateUserByAlias, updateUserById, 
     deleteUserByAlias, deleteUserById 
 } from '../services/users.js'
@@ -38,11 +38,9 @@ export async function registerPostHandler(req){
     } else if (body.password !== body.passwordRepeat) {
         throw new Error('Passwords do not coincide');
     }
-    const checks = ['email', 'alias']
-    const sames = await Promise.all(checks.map(c => dao.getSome(c, body[`${c}`])))
-    const unavailable = sames.map((v, i) => [checks[i], v]).filter(s => s[1].length > 0)
+    const unavailable = await checkUserAvailable(body);
     if (unavailable.length == 0) {
-        const data = await registerNewUser();
+        const data = await registerNewUser(body);
         return data;
     } else {
         throw new Error(`${unavailable.map(a => a[0]).join(' & ')} are already in use. Choose a different value for them`);
@@ -51,7 +49,6 @@ export async function registerPostHandler(req){
 
 export async function loginPostHandler(req){
     const body = req.body;
-    var thisUser;
     if (!((body.alias || body.email) && body.password)){
         throw new Error('Credentials missing');
     } else {

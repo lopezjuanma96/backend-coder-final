@@ -10,7 +10,7 @@ export async function getHandler(req){
 
     if(id){
         const data = await getOneProductById(id);
-        return { userData: {...user, isAdmin: true}, prodData: {data, exists: true} }
+        return { userData: {...user, isAdmin: true}, prodData: {prods, exists: true} }
     } else {
         const prods = await getAllProducts();
         return { userData: {...user, isAdmin: true}, prodData: {prods, exists: prods.length > 0} }

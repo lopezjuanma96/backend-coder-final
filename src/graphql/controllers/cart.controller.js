@@ -1,5 +1,6 @@
 import cartDAO from '../../containers/daos/cartDAO.js';
 import CartType from '../type/Cart.js';
+import { GraphQLID, GraphQLString } from 'graphql';
 
 const getCart = {
     type: CartType,

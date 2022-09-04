@@ -23,7 +23,15 @@ export async function registerNewUser(body){
     return { userData: body }
 }
 
+export async function checkUserAvailable(body){
+    const checks = ['email', 'alias']
+    const sames = await Promise.all(checks.map(c => dao.getSome(c, body[`${c}`])))
+    const unavailable = sames.map((v, i) => [checks[i], v]).filter(s => s[1].length > 0)
+    return unavailable;
+}
+
 export async function loginUser(body){
+    var thisUser;
     if (body.alias){
         thisUser = await dao.getFirst('alias', body.alias);
     } else {
