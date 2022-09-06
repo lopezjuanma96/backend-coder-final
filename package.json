@@ -5,7 +5,7 @@
   "description": "Final deliverable for Coderhouse Backend Course",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=DEV node src/index.js",
+    "test": "NODE_ENV=DEV node_modules/.bin/mocha test-client/mocha/*.test.js",
     "build": "node src/index.js"
   },
   "repository": {
@@ -33,5 +33,11 @@
     "mongoose": "^6.5.1",
     "socket.io": "^4.5.1",
     "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "axios": "^0.27.2",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "supertest": "^6.2.4"
   }
 }

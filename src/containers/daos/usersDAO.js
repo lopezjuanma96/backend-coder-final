@@ -25,6 +25,15 @@ class DAO{
 
     constructor(){
         this.container = ContainerFactory.getContainer(CONTAINER_TYPE, REFER);
+        if (CONTAINER_TYPE == 'memory') this.save(new DTO({
+            name : 'test',
+            alias : 'asdasd',
+            email : 'mail@mail.com',
+            thumbnail : '',
+            password : '123123',
+            passwordRepeat : '123123',
+            birthdate : '32156132548'})
+            )
     }
 
     async save(obj){

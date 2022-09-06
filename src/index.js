@@ -43,7 +43,6 @@ const app = express();
 const http = new Http(app);
 const io = new Io(http);
 const PORT = process.env.PORT || 8080;
-
 //----------- END CONSTANTS --------------
 
 //------------- SETUP ----------------
@@ -74,7 +73,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-app.use(cors);
+//app.use(cors()) //for some reason this is not working
 
 //routes
 
@@ -88,8 +87,9 @@ app.use('/graphql',
             graphiql: true
         }))
 app.get('*', (req, res) => res.redirect('/users/home'))
+//----------- END SETUP --------------
 
-http.listen(PORT, () => {
+export default http.listen(PORT, () => {
     if (process.env.NODE_ENV == "DEV"){
         logger.info(`Server up in http://localhost:${PORT} - ENVIRONMENT: ${process.env.NODE_ENV}`);
         logger.info(`Persistance on Products: ${process.env.PROD_CONTAINER_TYPE}`);
@@ -124,4 +124,3 @@ io.on('connection', (socket) => {
         });
     })
 })
-//----------- END SETUP --------------

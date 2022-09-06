@@ -24,7 +24,8 @@ class Container extends odin {
                 this.db.push(data);
             }
         } else {
-            this.db.push({id: this.#autoId(), ...data});
+            data.id = this.#autoId();
+            this.db.push(data);
         }
         return data;
     }

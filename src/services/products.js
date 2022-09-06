@@ -24,13 +24,13 @@ async function addExistingProduct(prod, prodToAdd){
 }
 
 export async function addProduct(prodToAdd){
-    const prod = await dao.getFirst('id', prodToAdd.id);
-    if (prod.exists()) {
+    const prod = await dao.getFirst('name', prodToAdd.name);
+    if (prod) {
         const updatedProd = await addExistingProduct(prod, prodToAdd);
         return updatedProd;
     } else {
-        await dao.save(new DTO(prodToAdd));
-        return prodToAdd;
+        const prodAdded = await dao.save(new DTO(prodToAdd));
+        return prodAdded;
     }
 }
 

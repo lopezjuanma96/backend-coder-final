@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt, GraphQLList } from 'graphql';
 
-export default CartType = new GraphQLObjectType({
+export default new GraphQLObjectType({
     name: 'Cart',
     description: 'Cart Type',
     fields: () => ({

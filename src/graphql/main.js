@@ -17,7 +17,7 @@ const MutationType = new GraphQLObjectType({
     }
 })
 
-export default schema = new GraphQLSchema({
+export default new GraphQLSchema({
     query: QueryType,
     mutation: MutationType
 })

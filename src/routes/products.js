@@ -27,7 +27,7 @@ prodRouter.get('/api', (req, res) => {
     })
 })
 
-prodRouter.post('api/add', (req, res) => {
+prodRouter.post('/api/add', (req, res) => {
     postHandler(req)
     .then(result => res.status(200).json(result))
     .catch(err => {
@@ -36,7 +36,7 @@ prodRouter.post('api/add', (req, res) => {
     })
 })
 
-prodRouter.put('api/addStock', (req, res) => {
+prodRouter.put('/api/addStock', (req, res) => {
     putHandler(req, false)
     .then(updated => res.json(updated))
     .catch(err => {
