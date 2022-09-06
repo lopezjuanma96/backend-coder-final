@@ -30,7 +30,7 @@ class DAO{
     async save(obj){
         const toSave = obj.getForDb();
         const saved = await this.container.save(toSave);
-        return obj;
+        return saved;
     }
 
     async getAll(){
@@ -55,7 +55,7 @@ class DAO{
         } else {
             got = await this.container.getByAttr(key, val);
         }
-        return new DTO(got[0] || {});
+        return got[0] ? new DTO(got[0]) : undefined;
     }
 
     async deleteAll(){
