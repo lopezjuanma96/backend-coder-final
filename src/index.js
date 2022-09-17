@@ -42,14 +42,14 @@ import cors from 'cors';
 const app = express();
 const http = new Http(app);
 const io = new Io(http);
-const PORT = process.env.PORT || 8080;
 //----------- END CONSTANTS --------------
 
 //------------- SETUP ----------------
 //env
 dotenv.config({
-    path: path.resolve(process.cwd(), `${process.env.NODE_ENV}.env`)
+    path: path.resolve(process.cwd(), `${process.env.NODE_ENV || 'DEV'}.env`)
 })
+const PORT = process.env.PORT;
 
 //server
 app.use(express.json())
@@ -73,7 +73,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-//app.use(cors()) //for some reason this is not working
+app.use(cors()) //for some reason this is not working
 
 //routes
 
@@ -90,13 +90,13 @@ app.get('*', (req, res) => res.redirect('/users/home'))
 //----------- END SETUP --------------
 
 export default http.listen(PORT, () => {
-    if (process.env.NODE_ENV == "DEV"){
+    if (process.env.NODE_ENV === "DEV"){
         logger.info(`Server up in http://localhost:${PORT} - ENVIRONMENT: ${process.env.NODE_ENV}`);
         logger.info(`Persistance on Products: ${process.env.PROD_CONTAINER_TYPE}`);
         logger.info(`Persistance on Cart: ${process.env.CART_CONTAINER_TYPE}`);
         logger.info(`Persistance on Chat: ${process.env.CHAT_CONTAINER_TYPE}`);
     } else {
-        logger.info(`Server up in http://localhost:${PORT}`);
+        logger.info(`Server up in PORT :${PORT}`);
     }
 })
 

@@ -6,7 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=DEV node_modules/.bin/mocha test-client/mocha/*.test.js",
-    "build": "node src/index.js"
+    "dev": "node src/index.js",
+    "prod": "NODE_ENV=PROD node src/index.js",
+    "prod-cmd": "set NODE_ENV=PROD&& node src/index.js",
+    "prod-ps": "$env:NODE_ENV=\"PROD\"&& node src/index.js"
   },
   "repository": {
     "type": "git",
