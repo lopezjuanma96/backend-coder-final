@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Final deliverable for Coderhouse Backend Course",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "test": "NODE_ENV=DEV node_modules/.bin/mocha test-client/mocha/*.test.js",
     "dev": "node src/index.js",
