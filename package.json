@@ -10,6 +10,7 @@
   "scripts": {
     "test": "NODE_ENV=DEV node_modules/.bin/mocha test-client/mocha/*.test.js",
     "dev": "node src/index.js",
+    "start": "npm run prod",
     "prod": "NODE_ENV=PROD node src/index.js",
     "prod-cmd": "set NODE_ENV=PROD&& node src/index.js",
     "prod-ps": "$env:NODE_ENV=\"PROD\"&& node src/index.js"
